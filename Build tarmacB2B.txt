@@ -1,0 +1,15 @@
+﻿1) Replace custom folder 
+2) Replace local.properties &localextension.xml
+3) Next from platform(/hybris/bin/platform) install below addons
+
+ant addoninstall -Daddonnames="b2bacceleratoraddon" -DaddonStorefront.yacceleratorstorefront="icommercestorefront"
+ant addoninstall -Daddonnames="commerceorgaddon" -DaddonStorefront.yacceleratorstorefront="icommercestorefront"
+ant addoninstall -Daddonnames="captchaaddon" -DaddonStorefront.yacceleratorstorefront="icommercestorefront"
+ant addoninstall -Daddonnames="sapinvoiceaddon" -DaddonStorefront.yacceleratorstorefront="icommercestorefront"
+ant addoninstall -Daddonnames="sapcoreaddon" -DaddonStorefront.yacceleratorstorefront="icommercestorefront"
+ant addoninstall -Daddonnames="orderselfserviceaddon" -DaddonStorefront.yacceleratorstorefront="icommercestorefront"
+ant addoninstall -Daddonnames="ordermanagementaddon" -DaddonStorefront.yacceleratorstorefront="icommercestorefront"
+
+4) After that do “ant clean all”
+5) Next “ant initialize”
+6) Run hybrisserver.bat

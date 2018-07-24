@@ -1,0 +1,63 @@
+# -----------------------------------------------------------------------
+# [y] hybris Platform
+#
+# Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+#
+# This software is the confidential and proprietary information of SAP
+# ("Confidential Information"). You shall not disclose such Confidential
+# Information and shall use it only in accordance with the terms of the
+# license agreement you entered into with SAP.
+# -----------------------------------------------------------------------
+$contentCatalog=icommerceContentCatalog
+$contentCatalogName=Icommerce Content Catalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Online])[default=$contentCatalog:Online]
+$productCatalog=icommerceProductCatalog
+$productCatalogName=Icommerce Product Catalog
+$productCV=catalogVersion(catalog(id[default=$productCatalog]),version[default='Online'])[unique=true,default=$productCatalog:Online]
+$picture=media(code, $contentCV);
+$image=image(code, $contentCV);
+$media=media(code, $contentCV);
+$page=page(uid, $contentCV);
+$contentPage=contentPage(uid, $contentCV);
+$product=product(code, $productCV)
+$category=category(code, $productCV)
+$siteResource=jar:com.icommerce.initialdata.constants.IcommerceInitialDataConstants&/icommerceinitialdata/import/sampledata/contentCatalogs/$contentCatalog
+$productResource=jar:com.icommerce.initialdata.constants.IcommerceInitialDataConstants&/icommerceinitialdata/import/sampledata/productCatalogs/$productCatalog
+$jarResourceCms=jar:com.icommerce.initialdata.constants.IcommerceInitialDataConstants&/icommerceinitialdata/import/sampledata/cockpits/cmscockpit
+$addonExtensionName=b2bacceleratoraddon
+$medias=medias(code, $contentCV);
+$mediaContainer=media(qualifier, $contentCV);
+$siteUid=icommerce
+
+# Language
+$lang=en
+###########Rotating image component################
+
+
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];mime;realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true];folder(qualifier)[default='images'];;
+;;carousel-home-slide-1;;carousel-1.jpg;$jarResourceCms/preview-images/carousel-1.jpg;;;
+;;carousel-home-slide-2;;carousel-2.jpg;$jarResourceCms/preview-images/carousel-2.jpg;;;
+;;carousel-home-slide-3;;carousel-3.jpg;$jarResourceCms/preview-images/carousel-3.jpg;;;
+
+
+
+#INSERT_UPDATE Media;mediaFormat(qualifier);code[unique=true];@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator][forceWrite=true];realfilename;altText;mime[default='image/jpeg'];$contentCV[unique=true];folder(qualifier)[default=images];
+#;widescreen;lscare_banner_1.png;$siteResource/images/banners/homepage/responsive/lscare_banner_1.png;lscare_banner_1.png;"Life Care";
+#;tablet;lscare_banner_1.png;$siteResource/images/banners/homepage/responsive/lscare_banner_1.png;lscare_banner_1.png;"Life Care";
+#;desktop;lscare_banner_1.png;$siteResource/images/banners/homepage/responsive/lscare_banner_1.png;lscare_banner_1.png;"Life Care";
+
+
+
+INSERT_UPDATE BannerComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef;$picture[lang=$lang]
+;;carousel-home-slider1-Component;carousel home slider1 Component;carousel-home-slider1-Component;carousel-home-slide-1;
+;;carousel-home-slider2-Component;carousel home slider2 Component;carousel-home-slider2-Component;carousel-home-slide-2;
+;;carousel-home-slider3-Component;carousel home slider3 Component;carousel-home-slider3-Component;carousel-home-slide-3;
+
+
+INSERT_UPDATE RotatingImagesComponent;$contentCV[unique=true];uid[unique=true];name;banners(&componentRef);&componentRef
+;;PowertoolsB2BHomepageCarouselComponent;Powertools Homepage Carousel;carousel-home-slider1-Component,carousel-home-slider2-Component,carousel-home-slider3-Component;PowertoolsB2BHomepageCarouselComponent
+
+
+
+
+###########################

@@ -1,0 +1,67 @@
+$contentCatalog=icommerceContentCatalog
+$contentCatalogName=Icommerce Content Catalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Online])[default=$contentCatalog:Online]
+$productCatalog=icommerceProductCatalog
+$productCatalogName=Icommerce Product Catalog
+$productCV=catalogVersion(catalog(id[default=$productCatalog]),version[default='Online'])[unique=true,default=$productCatalog:Online]
+$picture=media(code, $contentCV);
+$image=image(code, $contentCV);
+$media=media(code, $contentCV);
+$page=page(uid, $contentCV);
+$contentPage=contentPage(uid, $contentCV);
+$product=product(code, $productCV)
+$category=category(code, $productCV)
+$siteResource=jar:com.icommerce.initialdata.constants.IcommerceInitialDataConstants&/icommerceinitialdata/import/sampledata/contentCatalogs/$contentCatalog
+$productResource=jar:com.icommerce.initialdata.constants.IcommerceInitialDataConstants&/icommerceinitialdata/import/sampledata/productCatalogs/$productCatalog
+#$jarResourceCms=jar:com.icommerce.initialdata.constants.IcommerceInitialDataConstants&/icommerceinitialdata/import/sampledata/cockpits/cmscockpit
+$addonExtensionName=b2bacceleratoraddon
+$medias=medias(code, $contentCV);
+$mediaContainer=media(qualifier, $contentCV);
+$siteUid=icommerce
+
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+$storefrontContextRoot=$config-storefrontContextRoot
+# Import config properties into impex macros
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+$jarResourceCms=$config-jarResourceCmsValue
+# Language
+$lang=en
+
+#Page Templates
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;DashboardPageTemplate;Dashboard Page Template;category/dashboardpage;CategoryPage,ContentPage
+
+#Dashboard Page structure
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;DashboardPageTemplate;$jarResourceCms/structure-view/structure_loginPageTemplate.vm
+
+# Dashboard Page Template
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='DashboardPageTemplate'];validComponentTypes(code);compTypeGroup(code)
+;SiteLogo;;;logo
+;HeaderLinks;;;headerlinks
+;SearchBox;;;searchbox
+;MiniCart;;;minicart
+;NavigationBar;;;navigation
+;Footer;;;footer
+;TopHeaderSlot;;;wide
+;BottomHeaderSlot;;;wide
+;LeftContentSlot;;;wide
+;RightContentSlot;;;wide
+;PlaceholderContentSlot;;;
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='DashboardPageTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;SiteLogo-DashboardPage;SiteLogo;;SiteLogoSlot;true
+;;HomepageLink-DashboardPage;HomepageNavLink;;HomepageNavLinkSlot;true
+;;NavigationBar-DashboardPage;NavigationBar;;NavigationBarSlot;true
+;;MiniCart-DashboardPage;MiniCart;;MiniCartSlot;true
+;;Footer-DashboardPage;Footer;;FooterSlot;true
+;;HeaderLinks-DashboardPage;HeaderLinks;;HeaderLinksSlot;true
+;;SearchBox-DashboardPage;SearchBox;;SearchBoxSlot;true
+;;TopHeaderSlot-DashboardPage;TopHeaderSlot;;TopHeaderSlot;true
+;;BottomHeaderSlot-DashboardPage;BottomHeaderSlot;;BottomHeaderSlot;true
+;;LeftContentSlot-DashboardPage;LeftContentSlot;;LeftContentSlot;true
+;;RightContentSlot-DashboardPage;RightContentSlot;;RightContentSlot;true
+;;PlaceholderContentSlot-DashboardPage;PlaceholderContentSlot;;PlaceholderContentSlot;true
+
+INSERT_UPDATE ContentPage;$contentCV[unique=true];uid[unique=true];name;&pageRef;masterTemplate(uid,$contentCV);label;defaultPage[default='true'];approvalStatus(code)[default='approved'];homepage[default='false']
+;;dashboardpage;DashboardPage;dashboardpage;DashboardPageTemplate;dashboardpage;;;;
